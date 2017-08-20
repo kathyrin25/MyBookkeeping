@@ -152,6 +152,12 @@
     <Compile Include="Models\BookkeepingContext.cs" />
     <Compile Include="Models\BookkeepingLog.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\EFUnitOfWork.cs" />
+    <Compile Include="Repositories\IRepository.cs" />
+    <Compile Include="Repositories\IUnitOfWork.cs" />
+    <Compile Include="Repositories\Repository.cs" />
+    <Compile Include="Service\BookkeepingLogService.cs" />
+    <Compile Include="Service\BookkeepingService.cs" />
     <Compile Include="ViewModels\AddRecordViewModel.cs" />
   </ItemGroup>
   <ItemGroup>

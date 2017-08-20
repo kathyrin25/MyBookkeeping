@@ -8,18 +8,27 @@ using System.Web;
 using System.Web.Mvc;
 using MyBookkeeping.Models;
 using MyBookkeeping.ViewModels;
-using PagedList;
+using MyBookkeeping.Service;
+using MyBookkeeping.Repositories;
 
 namespace MyBookkeeping.Controllers
 {
     public class BookkeepingController : Controller
     {
-        private BookkeepingContext db = new BookkeepingContext();
+        private readonly BookkeepingService _BookkeepingSvc;
+        private readonly BookkeepingLogService _LogSvc;
+
+        public BookkeepingController()
+        {
+            var unitOfWork = new EFUnitOfWork();
+            _BookkeepingSvc = new BookkeepingService(unitOfWork);
+            _LogSvc = new BookkeepingLogService(unitOfWork);
+        }
 
         // GET: Bookkeeping
         public ActionResult Index()
         {
-            return View(db.MyBookkeepings.ToList());
+            return View(_BookkeepingSvc.Lookup());
         }
 
         // GET: Bookkeeping/Details/5
@@ -28,8 +37,10 @@ namespace MyBookkeeping.Controllers
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Bookkeeping bookkeeping = db.MyBookkeepings.Find(id);
+            }           
+
+            Bookkeeping bookkeeping = _BookkeepingSvc.GetSingle(id.Value);
+
             if (bookkeeping == null)
             {
                 return HttpNotFound();
@@ -49,13 +60,11 @@ namespace MyBookkeeping.Controllers
         public ActionResult List(int? Page)
         {
             //使用 PagedList.Mvc 加上分頁
-            int pageSize = 10;            
+            int pageSize = 10;
             int currenPage = (Page == null || Page < 1) ? 1 : Page.Value;
-
-            var BookkeepingList = db.MyBookkeepings.OrderBy(x => x.Date);  /*ToPagedList前必須先OrderBy*/
-            var result = BookkeepingList.ToPagedList(currenPage, pageSize);
-            ViewData["LineIndex"] = ((Page - 1) * pageSize);            
-
+            
+            var result = _BookkeepingSvc.LookupByPage(currenPage, pageSize);
+            
             return View(result);
         }      
 
@@ -71,17 +80,21 @@ namespace MyBookkeeping.Controllers
             ViewData["CurrentPage"] = Page;
             if (ModelState.IsValid)
             {
+                var recordId = Guid.NewGuid();
                 var bookkeeping = new Bookkeeping
                 {
-                    Id = Guid.NewGuid(),
+                    Id = recordId,
                     Date = bookkeepingData.Date,
                     Amount = bookkeepingData.Amount,
                     Remark = bookkeepingData.Remark,
                     Type = bookkeepingData.Type
                 };
-                
-                db.MyBookkeepings.Add(bookkeeping);
-                db.SaveChanges();
+                _BookkeepingSvc.Add(bookkeeping);
+                _BookkeepingSvc.Save();
+
+                _LogSvc.Add(recordId, "Create");
+                _LogSvc.Save();
+
                 return RedirectToAction("AddRecord", new { Page = Page });
             }
 
@@ -95,7 +108,7 @@ namespace MyBookkeeping.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Bookkeeping bookkeeping = db.MyBookkeepings.Find(id);
+            Bookkeeping bookkeeping = _BookkeepingSvc.GetSingle(id.Value);
             if (bookkeeping == null)
             {
                 return HttpNotFound();
@@ -110,11 +123,16 @@ namespace MyBookkeeping.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,sn,Date,Type,Amount,Remark")] Bookkeeping bookkeeping)
         {
-            if (ModelState.IsValid)
+            var oldData = _BookkeepingSvc.GetSingle(bookkeeping.Id);
+            if (oldData != null && ModelState.IsValid)
             {
-                db.Entry(bookkeeping).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                _BookkeepingSvc.Edit(bookkeeping, oldData);
+                _BookkeepingSvc.Save();
+
+                _LogSvc.Add(bookkeeping.Id, "Edit");
+                _LogSvc.Save();
+
+                return RedirectToAction("AddRecord", new { Page = 1 });
             }
             return View(bookkeeping);
         }
@@ -126,7 +144,8 @@ namespace MyBookkeeping.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Bookkeeping bookkeeping = db.MyBookkeepings.Find(id);
+
+            Bookkeeping bookkeeping = _BookkeepingSvc.GetSingle(id.Value);
             if (bookkeeping == null)
             {
                 return HttpNotFound();
@@ -139,19 +158,14 @@ namespace MyBookkeeping.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(Guid id)
         {
-            Bookkeeping bookkeeping = db.MyBookkeepings.Find(id);
-            db.MyBookkeepings.Remove(bookkeeping);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            Bookkeeping bookkeeping = _BookkeepingSvc.GetSingle(id);
+            _BookkeepingSvc.Delete(bookkeeping);
+            _BookkeepingSvc.Save();
+            _LogSvc.Add(id, "Delete");
+            _LogSvc.Save();
+            return RedirectToAction("AddRecord", new { Page = 1 });
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
+        
     }
 }

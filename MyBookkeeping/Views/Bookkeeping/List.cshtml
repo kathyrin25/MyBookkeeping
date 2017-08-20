@@ -4,12 +4,10 @@
 
 @{ 
     Layout = null;
-    var LineNumber = 0;
 
-    if (ViewData["LineIndex"] != null)
-    {
-        LineNumber = int.Parse(ViewData["LineIndex"].ToString());
-    }
+    //依Day2作業的建議, (1)直接用IEnumerable型態, 不用IPagedList (2)不再傳參數, 直接利用PagedList的功能:FirstItemOnPage
+    var list = (PagedList.IPagedList)Model;  
+    var LineNumber = list.FirstItemOnPage;
 }
 
 
@@ -57,11 +55,8 @@
 
 </table>
 
-<div style="color:orange;">
-    @{ 
-        var list = (PagedList.IPagedList)Model; 
-    }
-    Page @(list.PageCount < list.PageNumber ? 0 : list.PageNumber) of @list.PageCount
+<div style="color:orange;">    
+    Page @(list.PageCount < list.PageNumber ? 0 : list.PageNumber) of @list.PageCount  
 </div>
 @Html.PagedListPager(list, page => Url.Action("AddRecord", new { page }))
 
