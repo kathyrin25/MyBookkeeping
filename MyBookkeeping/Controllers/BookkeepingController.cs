@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using MyBookkeeping.Models;
 using MyBookkeeping.ViewModels;
+using PagedList;
 
 namespace MyBookkeeping.Controllers
 {
@@ -37,15 +38,25 @@ namespace MyBookkeeping.Controllers
         }
 
         // GET: Bookkeeping/Create
-        public ActionResult AddRecord()
+        public ActionResult AddRecord(int? Page)
         {
+            //這個頁面下方有list table , 是利用child action方式呈現, 所以利用CurrentPage 告訴ChildAction要呈現的頁面
+            ViewData["CurrentPage"] = Page;  
             return View();
         }
 
         [ChildActionOnly]
-        public ActionResult List()
-        {            
-            return View(db.MyBookkeepings.OrderBy(x=>x.sn).ToList());
+        public ActionResult List(int? Page)
+        {
+            //使用 PagedList.Mvc 加上分頁
+            int pageSize = 10;            
+            int currenPage = (Page == null || Page < 1) ? 1 : Page.Value;
+
+            var BookkeepingList = db.MyBookkeepings.OrderBy(x => x.Date);  /*ToPagedList前必須先OrderBy*/
+            var result = BookkeepingList.ToPagedList(currenPage, pageSize);
+            ViewData["LineIndex"] = ((Page - 1) * pageSize);            
+
+            return View(result);
         }      
 
         // POST: Bookkeeping/Create
@@ -53,8 +64,11 @@ namespace MyBookkeeping.Controllers
         // 詳細資訊，請參閱 http://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult AddRecord([Bind(Include = "Id,sn,Date,Type,Amount,Remark")] AddRecordViewModel bookkeepingData)
+        public ActionResult AddRecord([Bind(Include = "Id,sn,Date,Type,Amount,Remark")] AddRecordViewModel bookkeepingData, int? Page)
         {
+            //這個頁面下方有list table , 是利用child action方式呈現, 所以利用CurrentPage 告訴ChildAction要呈現的頁面
+            //希望資料送出後,下方仍然停在原來頁面, 所以還是保留CurrentPage
+            ViewData["CurrentPage"] = Page;
             if (ModelState.IsValid)
             {
                 var bookkeeping = new Bookkeeping
@@ -68,7 +82,7 @@ namespace MyBookkeeping.Controllers
                 
                 db.MyBookkeepings.Add(bookkeeping);
                 db.SaveChanges();
-                return RedirectToAction("AddRecord");
+                return RedirectToAction("AddRecord", new { Page = Page });
             }
 
             return View(bookkeepingData);

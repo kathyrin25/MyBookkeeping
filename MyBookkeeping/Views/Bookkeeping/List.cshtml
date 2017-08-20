@@ -1,8 +1,15 @@
-﻿@model IEnumerable<MyBookkeeping.Models.Bookkeeping>
+﻿@using PagedList.Mvc;
+
+@model IEnumerable<MyBookkeeping.Models.Bookkeeping>
 
 @{ 
     Layout = null;
     var LineNumber = 0;
+
+    if (ViewData["LineIndex"] != null)
+    {
+        LineNumber = int.Parse(ViewData["LineIndex"].ToString());
+    }
 }
 
 
@@ -49,6 +56,22 @@
     }
 
 </table>
+
+<div style="color:orange;">
+    @{ 
+        var list = (PagedList.IPagedList)Model; 
+    }
+    Page @(list.PageCount < list.PageNumber ? 0 : list.PageNumber) of @list.PageCount
+</div>
+@Html.PagedListPager(list, page => Url.Action("AddRecord", new { page }))
+
+
+
+
+
+
+
+
 
 
 
