@@ -160,6 +160,7 @@
     <Compile Include="Service\BookkeepingLogService.cs" />
     <Compile Include="Service\BookkeepingService.cs" />
     <Compile Include="ViewModels\AddRecordViewModel.cs" />
+    <Compile Include="ViewModels\EditViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />

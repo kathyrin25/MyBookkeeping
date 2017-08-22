@@ -108,12 +108,28 @@ namespace MyBookkeeping.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+            
+                    
             Bookkeeping bookkeeping = _BookkeepingSvc.GetSingle(id.Value);
             if (bookkeeping == null)
             {
                 return HttpNotFound();
             }
-            return View(bookkeeping);
+            else
+            {
+                EditViewModel EditDetail = new EditViewModel
+                {
+                    Id = bookkeeping.Id,
+                    sn = bookkeeping.sn,
+                    Date = bookkeeping.Date,
+                    Amount = bookkeeping.Amount,
+                    Type = bookkeeping.Type,
+                    Remark = bookkeeping.Remark
+                };
+
+                return View(EditDetail);
+            }
+            
         }
 
         // POST: Bookkeeping/Edit/5
