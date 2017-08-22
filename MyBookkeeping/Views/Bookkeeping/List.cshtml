@@ -10,6 +10,19 @@
     var LineNumber = list.FirstItemOnPage;
 }
 
+@helper DisplayType(string bookType)
+{
+    /*利用Razor helper, 讓 收入顯示為藍色, 支出顯示為紅色*/
+    if (bookType == "收入")
+    {
+            <b class="text-primary">@bookType</b>
+    }
+    else
+    {
+            <b class="text-danger">@bookType</b>
+    }
+}
+
 
 <table class="table table-bordered table-hover">
     <tr>
@@ -33,10 +46,10 @@
     {
         <tr>
             <td>
-                @(++LineNumber)
+                @(LineNumber++)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Type)
+                @DisplayType(item.Type.ToString())
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Date)
