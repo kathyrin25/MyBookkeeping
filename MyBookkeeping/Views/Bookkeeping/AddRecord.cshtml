@@ -11,8 +11,14 @@
 }
 
 <div class="well">
-@using (Html.BeginForm("AddRecord", "Bookkeeping", FormMethod.Post, new { @class = "form-horizontal" }))
+@using (Ajax.BeginForm("AddRecordByAJAX", "Bookkeeping", new AjaxOptions {
+    OnSuccess = "OnSuccess",
+    OnFailure = "OnFailure",
+    UpdateTargetId = "result_List",
+    HttpMethod = "POST",
+    LoadingElementId = "progress" }, new { @class = "form-horizontal" }))
 {
+
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
         @Html.AntiForgeryToken()
@@ -45,8 +51,8 @@
                 </div>
             </div>
             <div class="form-group">
-                <div class="col-sm-offset-4 col-sm-8">
-                    <button type="submit" class="btn btn-default">新增</button>
+                <div class="col-sm-offset-4 col-sm-8">                    
+                    <button class="btn btn-default">新增</button>
                 </div>
             </div>
        
@@ -60,12 +66,31 @@
 
 
 
+<div id="progress" class="modal">
+    <div class="center">
+        <img src="~/images/processing.gif" />
+    </div>
+</div>
+
 <div class="row">
     <div class="col-md-12">
-        @Html.Action("List", new { Page = @CurrentPage })
+        <div id="result_List">
+            @Html.Action("List", new { Page = @CurrentPage })
+        </div>        
     </div>
 </div>
 
 @section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>  <!--使用Ajax, 一定要引用-->
 }
+
+<script type="text/javascript"> 
+    function OnSuccess(response) {
+        alert("新增完成.");
+    }
+    function OnFailure(response) {
+        alert("Error occured." + response);
+    }
+</script>

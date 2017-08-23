@@ -10,7 +10,9 @@ namespace MyBookkeeping.Controllers
     {
         public ActionResult Index()
         {
-            return View();
+            //直接導到作業
+            return RedirectToAction("AddRecord", "Bookkeeping", new { Page = 1 });
+            //return View();
         }
 
         public ActionResult About()

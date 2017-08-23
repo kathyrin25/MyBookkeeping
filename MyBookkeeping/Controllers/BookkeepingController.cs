@@ -56,7 +56,7 @@ namespace MyBookkeeping.Controllers
             return View();
         }
 
-        [ChildActionOnly]
+        //[ChildActionOnly]  -->利用ajax回傳時, 如果設為 ChildActionOnly會出錯
         public ActionResult List(int? Page)
         {
             //使用 PagedList.Mvc 加上分頁
@@ -99,6 +99,30 @@ namespace MyBookkeeping.Controllers
             }
 
             return View(bookkeepingData);
+        }
+
+
+        [HttpPost]
+        public ActionResult AddRecordByAJAX(DateTime Date, BookType Type, int Amount, string Remark, int Page)
+        {
+            //利用AJAX Help新增資料  
+            var recordId = Guid.NewGuid();
+            Bookkeeping data = new Bookkeeping
+            {
+                Id = recordId,
+                Date = Date,
+                Type = Type,
+                Amount = Amount,
+                Remark = Remark
+            };
+
+            _BookkeepingSvc.Add(data);
+            _BookkeepingSvc.Save();
+
+            _LogSvc.Add(recordId, "Create");
+            _LogSvc.Save();
+           
+            return RedirectToAction("List", new { Page = Page });  //完成,回傳下方的list資料
         }
 
         // GET: Bookkeeping/Edit/5
