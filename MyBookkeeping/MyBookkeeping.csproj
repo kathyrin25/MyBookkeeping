@@ -144,6 +144,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helper\CustomHtmlExtensions.cs" />
     <Compile Include="Migrations\201708200343523_init.cs" />
     <Compile Include="Migrations\201708200343523_init.Designer.cs">
       <DependentUpon>201708200343523_init.cs</DependentUpon>
