@@ -93,7 +93,7 @@ namespace MyBookkeeping.Controllers
                 _BookkeepingSvc.Save();
 
                 _LogSvc.Add(recordId, "Create");
-                _LogSvc.Save();
+                _LogSvc.Save();               
 
                 return RedirectToAction("AddRecord", new { Page = Page });
             }
@@ -106,21 +106,24 @@ namespace MyBookkeeping.Controllers
         public ActionResult AddRecordByAJAX(DateTime Date, BookType Type, int Amount, string Remark, int Page)
         {
             //利用AJAX Help新增資料  
-            var recordId = Guid.NewGuid();
-            Bookkeeping data = new Bookkeeping
+            if (ModelState.IsValid)  /*加驗證*/
             {
-                Id = recordId,
-                Date = Date,
-                Type = Type,
-                Amount = Amount,
-                Remark = Remark
-            };
+                var recordId = Guid.NewGuid();
+                Bookkeeping data = new Bookkeeping
+                {
+                    Id = recordId,
+                    Date = Date,
+                    Type = Type,
+                    Amount = Amount,
+                    Remark = Remark
+                };
 
-            _BookkeepingSvc.Add(data);
-            _BookkeepingSvc.Save();
+                _BookkeepingSvc.Add(data);
+                _BookkeepingSvc.Save();
 
-            _LogSvc.Add(recordId, "Create");
-            _LogSvc.Save();
+                _LogSvc.Add(recordId, "Create");
+                _LogSvc.Save();
+            }
            
             return RedirectToAction("List", new { Page = Page });  //完成,回傳下方的list資料
         }

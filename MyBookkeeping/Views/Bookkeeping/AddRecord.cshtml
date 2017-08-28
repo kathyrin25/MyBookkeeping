@@ -16,7 +16,8 @@
     OnFailure = "OnFailure",
     UpdateTargetId = "result_List",
     HttpMethod = "POST",
-    LoadingElementId = "progress" }, new { @class = "form-horizontal" }))
+    LoadingElementId = "progress",
+    Confirm="Are you sure ?"}, new { @class = "form-horizontal" }))
 {
 
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })

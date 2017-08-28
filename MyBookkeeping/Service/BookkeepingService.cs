@@ -28,7 +28,7 @@ namespace MyBookkeeping.Service
             //使用 PagedList.Mvc 加上分頁
 
             /*ToPagedList前必須先OrderBy*/
-            var result = _BookkeepingRep.LookupAll().OrderBy(x => x.Date).ToPagedList(Page, pageSize);
+            var result = _BookkeepingRep.LookupAll().OrderByDescending(x => x.Date).ToPagedList(Page, pageSize);
            
             return result;
         }

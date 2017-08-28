@@ -30,9 +30,10 @@ namespace MyBookkeeping.Controllers
             //}           
             
 
+            //最好一個驗證做一件事, 提高重覆使用性
             // Remote 驗證是使用 Get 因此要開放
             if (isValidate)
-                return Json(isValidate, JsonRequestBehavior.AllowGet);
+                return Json(isValidate, JsonRequestBehavior.AllowGet);  // return Json("true", JsonRequestBehavior.AllowGet);  也可以,MVC會自動轉型
             else
                 return Json(ErrorMsg, JsonRequestBehavior.AllowGet);  //回傳自訂的錯誤訊息
         }
