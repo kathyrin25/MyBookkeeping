@@ -10,6 +10,7 @@ using MyBookkeeping.Models;
 using MyBookkeeping.ViewModels;
 using MyBookkeeping.Service;
 using MyBookkeeping.Repositories;
+using MyBookkeeping.ValidateAttribute;
 
 namespace MyBookkeeping.Controllers
 {
@@ -106,25 +107,53 @@ namespace MyBookkeeping.Controllers
         public ActionResult AddRecordByAJAX(DateTime Date, BookType Type, int Amount, string Remark, int Page)
         {
             //利用AJAX Help新增資料  
-            if (ModelState.IsValid)  /*加驗證*/
+            /*加驗證, 利用自訂驗證檢查,這樣寫很怪,MVC應該有更好的方式 >"<  */
+            string errorMsg = String.Empty;
+            string today = DateTime.Now.ToString("yyyy/MM/dd");
+            CheckDateAttribute CheckDate = new CheckDateAttribute(today);
+            if (!CheckDate.IsValid(Date))
             {
-                var recordId = Guid.NewGuid();
-                Bookkeeping data = new Bookkeeping
-                {
-                    Id = recordId,
-                    Date = Date,
-                    Type = Type,
-                    Amount = Amount,
-                    Remark = Remark
-                };
+                errorMsg += "日期不可大於今天 /";
+            }                
 
-                _BookkeepingSvc.Add(data);
-                _BookkeepingSvc.Save();
+            PositiveIntegerAttribute CheckAmount = new ValidateAttribute.PositiveIntegerAttribute(0);
+            if (!CheckAmount.IsValid(Amount))
+            {
+                errorMsg += "金額應輸入大於0的正整數 / ";
+            }                
 
-                _LogSvc.Add(recordId, "Create");
-                _LogSvc.Save();
+            if (Remark.Length > 300)
+            {
+                errorMsg += "Remark字數不可大於300字元 / ";
             }
-           
+
+            if (!errorMsg.Equals(""))
+            {
+                return Json(new
+                {
+                    success = false,
+                    message = errorMsg
+                });
+            }
+            
+
+            var recordId = Guid.NewGuid();
+            Bookkeeping data = new Bookkeeping
+            {
+                Id = recordId,
+                Date = Date,
+                Type = Type,
+                Amount = Amount,
+                Remark = Remark
+            };
+
+            _BookkeepingSvc.Add(data);
+            _BookkeepingSvc.Save();
+
+            _LogSvc.Add(recordId, "Create");
+            _LogSvc.Save();
+
+
             return RedirectToAction("List", new { Page = Page });  //完成,回傳下方的list資料
         }
 

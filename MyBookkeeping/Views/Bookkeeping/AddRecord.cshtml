@@ -11,13 +11,16 @@
 }
 
 <div class="well">
-@using (Ajax.BeginForm("AddRecordByAJAX", "Bookkeeping", new AjaxOptions {
+
+@using (Ajax.BeginForm("AddRecordByAJAX", "Bookkeeping", new AjaxOptions
+{
     OnSuccess = "OnSuccess",
     OnFailure = "OnFailure",
     UpdateTargetId = "result_List",
     HttpMethod = "POST",
     LoadingElementId = "progress",
-    Confirm="Are you sure ?"}, new { @class = "form-horizontal" }))
+    Confirm = "Are you sure ?"
+}, new { @class = "form-horizontal" }))
 {
 
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -85,13 +88,6 @@
     <script src="~/Scripts/jquery.validate.js"></script>
     <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
     <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>  <!--使用Ajax, 一定要引用-->
+    <script src="~/Scripts/CustJS/AddRecord.js"></script>    
 }
 
-<script type="text/javascript"> 
-    function OnSuccess(response) {
-        alert("新增完成.");
-    }
-    function OnFailure(response) {
-        alert("Error occured." + response);
-    }
-</script>
