@@ -1,11 +1,14 @@
-﻿using System;
+﻿using MyBookkeeping.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
 
 namespace MyBookkeeping.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         public ActionResult Index()
@@ -27,6 +30,33 @@ namespace MyBookkeeping.Controllers
             ViewBag.Message = "Contact page.";
 
             return View();
+        }
+
+        [AllowAnonymous]
+        public ActionResult Login()
+        {
+            return View();
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        public ActionResult Login(LoginViewModel login)
+        {            
+            if (!ModelState.IsValid)
+            {
+                return View(login);
+            }
+
+            FormsAuthentication.RedirectFromLoginPage(login.Account, false);
+            
+            return Redirect(FormsAuthentication.GetRedirectUrl(login.Account, false));
+        }
+
+        [AllowAnonymous]
+        public ActionResult Logout()
+        {  
+            FormsAuthentication.SignOut();
+            return RedirectToAction("Login", "Home");
         }
     }
 }

@@ -160,10 +160,12 @@
     <Compile Include="Repositories\Repository.cs" />
     <Compile Include="Service\BookkeepingLogService.cs" />
     <Compile Include="Service\BookkeepingService.cs" />
+    <Compile Include="ValidateAttribute\BanAccountAttribue.cs" />
     <Compile Include="ValidateAttribute\CheckDateAttribute.cs" />
     <Compile Include="ValidateAttribute\PositiveIntegerAttribute.cs" />
     <Compile Include="ViewModels\AddRecordViewModel.cs" />
     <Compile Include="ViewModels\EditViewModel.cs" />
+    <Compile Include="ViewModels\LoginViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
@@ -212,6 +214,7 @@
     <Content Include="Views\Bookkeeping\Index.cshtml" />
     <Content Include="Views\Bookkeeping\AddRecord.cshtml" />
     <Content Include="Views\Bookkeeping\List.cshtml" />
+    <Content Include="Views\Home\Login.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

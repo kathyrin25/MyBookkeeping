@@ -14,6 +14,7 @@ using MyBookkeeping.ValidateAttribute;
 
 namespace MyBookkeeping.Controllers
 {
+    [Authorize]
     public class BookkeepingController : Controller
     {
         private readonly BookkeepingService _BookkeepingSvc;
@@ -53,7 +54,8 @@ namespace MyBookkeeping.Controllers
         public ActionResult AddRecord(int? Page)
         {
             //這個頁面下方有list table , 是利用child action方式呈現, 所以利用CurrentPage 告訴ChildAction要呈現的頁面
-            ViewData["CurrentPage"] = Page;  
+            ViewData["CurrentPage"] = Page;
+            ViewData["UserID"] = User.Identity.Name;
             return View();
         }
 
