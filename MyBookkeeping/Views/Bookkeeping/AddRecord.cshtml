@@ -1,17 +1,19 @@
 ﻿@model MyBookkeeping.ViewModels.AddRecordViewModel
 
 @{
-    ViewBag.Title = "AddRecord";
+    ViewBag.Title = "AddRecord";  
 
     int CurrentPage = 1;  /*主要是要傳給ChildAction使用*/
     if (ViewData["CurrentPage"] != null)
     {
         CurrentPage = int.Parse(ViewData["CurrentPage"].ToString());
     }
+
+    
 }
 
 <div class="well">
-    <div style="color:palevioletred; font-weight:bold;">Hi , @ViewData["UserID"].ToString()</div>
+    <div style="color:palevioletred; font-weight:bold;">Hi , @User.Identity.Name</div>
 
 @using (Ajax.BeginForm("AddRecordByAJAX", "Bookkeeping", new AjaxOptions
 {

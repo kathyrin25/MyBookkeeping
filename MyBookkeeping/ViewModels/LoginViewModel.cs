@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Web;
 using MyBookkeeping.ValidateAttribute;
+using System.Web.Security;
 
 namespace MyBookkeeping.ViewModels
 {
@@ -31,10 +32,11 @@ namespace MyBookkeeping.ViewModels
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            if (!(Account == "aa@aa.com" && Password == "12345"))
+            //這個先暫時寫hard code代替
+            if (!(Account == "aa@aa.com" && Password == "12345") && !(Account == "bb@bb.com" && Password == "12345"))
             {
                 yield return new ValidationResult("無此帳號或密碼", new string[] { "Account" });
-            }
+            }            
         }
     }
 }

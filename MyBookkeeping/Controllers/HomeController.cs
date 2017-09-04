@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
+using MyBookkeeping.Filters;
 
 namespace MyBookkeeping.Controllers
 {
@@ -18,6 +19,7 @@ namespace MyBookkeeping.Controllers
             //return View();
         }
 
+        [CheckAuthorizeActionFilter(AuthRole = "Admin")]
         public ActionResult About()
         {
             ViewBag.Message = "About page.";
@@ -47,14 +49,42 @@ namespace MyBookkeeping.Controllers
                 return View(login);
             }
 
-            FormsAuthentication.RedirectFromLoginPage(login.Account, false);
-            
+            //這個先暫時寫hard code代替
+            var role = String.Empty;
+            if (login.Account == "aa@aa.com")
+            {
+                role = "Admin";
+            }
+            else if (login.Account == "bb@bb.com")
+            {
+                role = "Normal";
+            }
+
+            //驗證通過
+            var ticket = new FormsAuthenticationTicket(
+                version: 1,
+                name: login.Account,
+                issueDate: DateTime.Now,
+                expiration: DateTime.Now.AddMinutes(30),
+                isPersistent: false,
+                userData: role,
+                cookiePath: FormsAuthentication.FormsCookiePath);
+
+            // Encrypt the ticket.
+            string encTicket = FormsAuthentication.Encrypt(ticket);
+
+            // Create the cookie.
+            Response.Cookies.Add(new HttpCookie(FormsAuthentication.FormsCookieName, encTicket));
+                        
             return Redirect(FormsAuthentication.GetRedirectUrl(login.Account, false));
         }
 
+
+
         [AllowAnonymous]
         public ActionResult Logout()
-        {  
+        {
+            Response.Cookies.Clear();
             FormsAuthentication.SignOut();
             return RedirectToAction("Login", "Home");
         }
