@@ -19,6 +19,7 @@ namespace MyBookkeeping.Controllers
             //return View();
         }
 
+        
         [CheckAuthorizeActionFilter(AuthRole = "Admin")]
         public ActionResult About()
         {
@@ -27,6 +28,7 @@ namespace MyBookkeeping.Controllers
             return View();
         }
 
+        [Authorize(Roles="Normal")]
         public ActionResult Contact()
         {
             ViewBag.Message = "Contact page.";

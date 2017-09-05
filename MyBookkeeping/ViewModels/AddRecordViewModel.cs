@@ -15,6 +15,7 @@ namespace MyBookkeeping.ViewModels
         [Display(Name = "日期")]
         [Required]       
         [CheckDate("",ErrorMessage ="日期不可大於今天")]
+        [UIHint("DateTimeInput")]
         public DateTime Date { get; set; }
 
       

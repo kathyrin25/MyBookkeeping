@@ -30,12 +30,27 @@ $.validator.addMethod("positiveinteger", function (value, element, param) {
     if (value == false) {
         return true;
     }
-    console.log(value);
-    console.log(param);
+    //console.log(value);
+    //console.log(param);
     if (Number(value) <= Number(param)) {
         return false;
     }
     else {
         return true;
     }
+});
+
+$(function () {
+    /*注意屬性名稱 :data-datetimepicker 和 DateTimeInput.cshtml : data_datetimepicker 對應*/
+    $('[data-datetimepicker]').each(function () {
+        var id = $(this).attr('id');
+       
+        $(this).pickadate({
+            format: 'yyyy/mm/dd',
+            selectYears: true,
+            selectMonths: true,
+            selectYears: 4
+        });
+        
+    });
 });

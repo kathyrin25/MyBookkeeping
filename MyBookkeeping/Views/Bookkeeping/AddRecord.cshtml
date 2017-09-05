@@ -1,7 +1,7 @@
 ﻿@model MyBookkeeping.ViewModels.AddRecordViewModel
 
 @{
-    ViewBag.Title = "AddRecord";  
+    ViewBag.Title = "AddRecord";
 
     int CurrentPage = 1;  /*主要是要傳給ChildAction使用*/
     if (ViewData["CurrentPage"] != null)
@@ -9,8 +9,11 @@
         CurrentPage = int.Parse(ViewData["CurrentPage"].ToString());
     }
 
-    
 }
+
+<link href="~/Scripts/pickadate/themes/default.css"  rel="stylesheet" />
+<link href="~/Scripts/pickadate/themes/default.date.css" rel="stylesheet" />
+
 
 <div class="well">
     <div style="color:palevioletred; font-weight:bold;">Hi , @User.Identity.Name</div>
@@ -72,7 +75,6 @@
 </div>
 
 
-
 <div id="progress" class="modal">
     <div class="center">
         <img src="~/images/processing.gif" />
@@ -90,7 +92,11 @@
 @section Scripts {
     <script src="~/Scripts/jquery.validate.js"></script>
     <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
-    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>  <!--使用Ajax, 一定要引用-->
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>  <!--使用Ajax, 一定要引用-->    
+
+    <script src="~/Scripts/pickadate/picker.js"></script>
+    <script src="~/Scripts/pickadate/picker.date.js"></script>
+
     <script src="~/Scripts/CustJS/AddRecord.js"></script>    
 }
 
