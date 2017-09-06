@@ -50,6 +50,7 @@ namespace MyBookkeeping.Controllers
             return View(bookkeeping);
         }
 
+        [Route("skilltree")]  /*記帳簿路由改為SkillTree*/
         // GET: Bookkeeping/Create
         public ActionResult AddRecord(int? Page)
         {
@@ -68,7 +69,30 @@ namespace MyBookkeeping.Controllers
             var result = _BookkeepingSvc.LookupByPage(currenPage, pageSize);
             
             return View(result);
-        }      
+        }
+          
+              
+        [Route("skilltree/{YY:int}/{MM:int:min(1):max(12)}")]  /*年月收支 http://localhost/skilltree/yyyy/mm */
+        [Route("skilltree/{YY:int}-{MM:int:min(1):max(12)}")]  /*多個Route設定 */
+        public ActionResult ListByYM(int? YY, int? MM)
+        {
+            DateTime sDate = DateTime.Now.AddDays(-DateTime.Now.Day + 1);  //預設帶本月
+
+            if (YY.HasValue == true && MM.HasValue == true)
+            {
+                if (!DateTime.TryParse(YY.ToString() +"/"+ MM.ToString() + "/01", out sDate))  //格式有誤
+                {
+                    ViewData["errorMsg"] = "參數格式錯誤！格式應為 yyyy/MM (日期年／月)";
+
+                    return View();
+                }
+            }
+
+            DateTime eDate = sDate.AddMonths(1);
+            var result = _BookkeepingSvc.Lookup().Where(x => x.Date >= sDate && x.Date < eDate).OrderBy(x => x.Date);
+
+            return View(result);
+        }
 
         // POST: Bookkeeping/Create
         // 若要免於過量張貼攻擊，請啟用想要繫結的特定屬性，如需

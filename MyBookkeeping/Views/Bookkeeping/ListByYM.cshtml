@@ -1,0 +1,49 @@
+﻿@model IEnumerable<MyBookkeeping.Models.Bookkeeping>
+
+@{
+    ViewBag.Title = "ListByYM";
+}
+
+@if (Model == null)
+{
+    <div class="alert alert-danger">
+        <strong>Warning!</strong> @ViewData["errorMsg"]
+    </div>
+
+}
+else
+{
+
+
+<h2>ListByYM</h2>
+
+<table class="table">
+    <tr>        
+        <th>
+            @Html.DisplayNameFor(model => model.Date)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Type)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Amount)
+        </th>  
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>        
+        <td>
+            @Html.DisplayFor(modelItem => item.Date)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Type)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Amount)
+        </td>
+    </tr>
+}
+
+</table>
+
+}
