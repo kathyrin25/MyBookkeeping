@@ -138,6 +138,11 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
+    <Compile Include="Areas\Admin\Controllers\DataListController.cs" />
+    <Compile Include="Areas\Admin\ViewModels\EditDataViewModel.cs" />
+    <Compile Include="Areas\Admin\ViewModels\ListDataViewModel.cs" />
+    <Compile Include="Areas\Admin\ViewModels\QueryDataViewModel.cs" />
     <Compile Include="Controllers\BookkeepingController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ValidateController.cs" />
@@ -180,8 +185,18 @@
     <Content Include="images\Processing.gif" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Areas\Admin\Views\web.config" />
+    <Content Include="Areas\Admin\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\Admin\Views\DataList\List.cshtml" />
+    <Content Include="Areas\Admin\Views\DataList\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\DisplayTemplates\DateTime.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\EditorTemplates\DateTimeInput.cshtml" />
+    <Content Include="Areas\Admin\Views\DataList\Delete.cshtml" />
+    <Content Include="Areas\Admin\Views\DataList\Edit.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\CustJS\AddRecord.js" />
+    <Content Include="Scripts\CustJS\setDateSelector.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
@@ -275,6 +290,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Areas\Admin\Models\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

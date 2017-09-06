@@ -1,0 +1,65 @@
+﻿@using PagedList.Mvc;
+@using MyBookkeeping.Helper;
+
+@model IEnumerable<MyBookkeeping.Areas.Admin.ViewModels.ListDataViewModel>
+
+@{
+    Layout = null;
+    var list = (PagedList.IPagedList)Model;
+    var LineNumber = list.FirstItemOnPage;
+    
+}
+
+<table class="table">
+    <tr>        
+        <th></th>
+        <th>
+            #
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Date)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Amount)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Type)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Remark)
+        </th>
+        
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>        
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-primary btn-sm" })
+            @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-warning btn-sm" })
+        </td>
+        <td>
+            @(LineNumber++)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Date)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Amount)
+        </td>
+        <td class="@Html.ShowClass(item.Type)">
+            @Html.DisplayFor(modelItem => item.Type)
+        </td>
+        <td style="word-break: break-all; width: 550px;">
+            @Html.DisplayFor(modelItem => item.Remark)
+        </td>
+        
+    </tr>
+}
+
+</table>
+
+<div style="color:orange;">
+    Page @(list.PageCount < list.PageNumber ? 0 : list.PageNumber) of @list.PageCount
+</div>
+@Html.PagedListPager(list, page => Url.Action("Index", new { page, StartDate = @ViewData["SD"], EndDate = @ViewData["ED"] }))
+

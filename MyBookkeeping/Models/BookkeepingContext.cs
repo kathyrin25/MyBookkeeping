@@ -1,6 +1,6 @@
 ﻿namespace MyBookkeeping.Models
 {
-    using System;
+       using System;
     using System.Data.Entity;
     using System.Linq;
 
@@ -21,7 +21,7 @@
         // Code First 模型的詳細資訊，請參閱 http://go.microsoft.com/fwlink/?LinkId=390109。
 
          public virtual DbSet<Bookkeeping> MyBookkeepings { get; set; }
-         public virtual  DbSet<BookkeepingLog> MyBookkeepingLogs { get; set; }
+         public virtual  DbSet<BookkeepingLog> MyBookkeepingLogs { get; set; }         
     }
 
    

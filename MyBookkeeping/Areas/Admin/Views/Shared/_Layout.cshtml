@@ -1,13 +1,11 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Bookkeeping -  @ViewBag.Title </title>
     <link href="~/Content/bootstrap.css" rel="stylesheet" />
     <link href="~/Content/site.css" rel="stylesheet" />
-
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -18,40 +16,25 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("My Bookkeeping", "AddRecord", "Bookkeeping", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("My Bookkeeping", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("首頁", "Index", "Home")</li>
-                    <li>@Html.ActionLink("關於", "About", "Home")</li>
-                    <li>@Html.ActionLink("連絡方式", "Contact", "Home")</li>
-
-                        @{
-                            if (User.IsInRole("Admin"))  /*只有Admin才會看到*/
-                            {                                
-                                <li>@Html.ActionLink("backend", "Index", "DataList", new { Area = "Admin" }, null)</li>
-                            }
-                        }
-                    
-
-                    <li>@Html.ActionLink("Log out", "Logout", "Home")</li>
                 </ul>
             </div>
         </div>
     </div>
+
     <div class="container body-content">
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - <a href="#">SkillTree</a></p>
+            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
         </footer>
     </div>
 
-
     <script src="~/Scripts/jquery-1.10.2.js"></script>
     <script src="~/Scripts/bootstrap.js"></script>
-    
-
-    @RenderSection("scripts", required: false)  <!--這個一定要放在最後-->
+    @RenderSection("scripts", required: false)
 </body>
 </html>
