@@ -70,6 +70,7 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -144,8 +145,10 @@
     <Compile Include="Areas\Admin\ViewModels\ListDataViewModel.cs" />
     <Compile Include="Areas\Admin\ViewModels\QueryDataViewModel.cs" />
     <Compile Include="Controllers\BookkeepingController.cs" />
+    <Compile Include="Controllers\FeedController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ValidateController.cs" />
+    <Compile Include="CustomResults\RssResult.cs" />
     <Compile Include="Filters\CheckAuthorizeActionFilter.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

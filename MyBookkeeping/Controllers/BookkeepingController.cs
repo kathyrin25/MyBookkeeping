@@ -33,6 +33,7 @@ namespace MyBookkeeping.Controllers
             return View(_BookkeepingSvc.Lookup());
         }
 
+        [AllowAnonymous] /*for testing, 為了讓RSS可以讀, 暫時不設定權限*/
         // GET: Bookkeeping/Details/5
         public ActionResult Details(Guid? id)
         {
